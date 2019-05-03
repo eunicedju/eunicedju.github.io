@@ -75,6 +75,7 @@
       <p id="sodium"></p>
       <p id="carbohydrates"></p>
       <p id="protein"></p>
+      <svg id='nutrition_graph' width="400" height="300"></svg>
       <!-- <p id="addToCart"> Add to Cart </p> -->
       <button id="addToCart">Add To Cart</button>
     </div>
@@ -252,8 +253,8 @@
     menu_data=data;
     // console.log(data[10]["Item"]);
 
-  const burgers=[["Big Mac","big_mac.jpg"], ["Quarter Pounder with Cheese","quarter_pounder.jpg"], ["Double Quarter Pounder with Cheese","double_quarter_pounder.jpg"],
-  ["Double Cheeseburger","double_cheeseburger.jpg"],["McChicken","mcchicken.jpg"], ["Premium Crispy Chicken Classic Sandwich","crispy_chicken_sandwich.png"], ["Premium Grilled Chicken Classic Sandwich","grilled_chicken_sandwich.jpg"]];
+  const burgers=[["Big Mac","big_mac.jpg"], ["Quarter Pounder","quarter_pounder.jpg"], ["Double Quarter Pounder","double_quarter_pounder.jpg"],
+  ["Double Cheeseburger","double_cheeseburger.jpg"],["McChicken","mcchicken.jpg"], ["Crispy Chicken Sandwich","crispy_chicken_sandwich.png"], ["Grilled Chicken Sandwich","grilled_chicken_sandwich.jpg"]];
   // const sidePics=[];
 
   burgers.forEach((d, i)=>{
@@ -292,6 +293,47 @@
               document.getElementById("sodium").innerHTML = "<b>Sodium:</b> "+ d["Sodium"];
               document.getElementById("carbohydrates").innerHTML = "<b>Carbohydrates:</b> "+ d["Carbohydrates"];
               document.getElementById("protein").innerHTML = "<b>Protein:</b> "+ d["Protein"];
+
+              //graph
+              let nutrition_graph = d3.select("svg#nutrition_graph");
+              let width = nutrition_graph.attr("width");
+              let height = nutrition_graph.attr("height");
+              let xscale = d3.scaleLinear()
+                .domain([0,1000])
+                .range([0,400]);
+
+              let yscale = d3.scaleLinear()
+                .domain([0,10])
+                .range([300,0]);
+
+              var xaxis = d3.axisBottom()
+                  .scale(xscale)
+                  .ticks(3);
+
+              var xaxis_group = nutrition_graph.append("g")
+                  // .attr("transform", "translate(30,30)")
+                  //move 45px to accomodate axis
+                  .call(xaxis);
+
+              var yaxis = d3.axisLeft()
+                  .scale(yscale)
+                  .ticks(10);
+              var yaxis_group = nutrition_graph.append("g")
+                  // .attr("transform", "translate(30,0)")
+                  //.style("font-size", 8)
+                  .call(yaxis);
+
+                svg.append("line")
+                  .attr("x1",xscale( d["Calories"] ))
+                  .attr("x2",yscale( d["Calories"] ))
+                  .attr("y1",height/2)
+                  .attr("y2",height/2 - yscale( d["Calories"] ))
+                  .style("stroke", "#ffffff")
+                  .style("stroke-width", 10);
+
+
+
+
               var button = document.getElementById("addToCart");
               button.onclick = function(){
                   cart.push([name,d["Calories"]]);
