@@ -127,7 +127,7 @@
     updateCal();
   };
   let inchChange = function() {
-    selectedInch = parsInt(d3.select(this).property('value'));
+    selectedInch = parseInt(d3.select(this).property('value'));
     updateCal();
   };
   let weightChange = function() {
