@@ -123,11 +123,11 @@
     updateCal();
   };
   let feetChange = function() {
-    selectedFeet = d3.select(this).property('value');
+    selectedFeet = parseInt(d3.select(this).property('value'));
     updateCal();
   };
   let inchChange = function() {
-    selectedInch = d3.select(this).property('value');
+    selectedInch = parsInt(d3.select(this).property('value'));
     updateCal();
   };
   let weightChange = function() {
