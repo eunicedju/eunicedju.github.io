@@ -278,8 +278,13 @@
 
     let images = d3.selectAll("image");
     var cart=[];
+    // images.on("click", function(){
+    //   // nutrition_graph.selectAll("*").remove()
+    //   // d3.selectAll("svg#nutrition_graph").remove();
+    // });
 
     images.on("click", function() {
+
           let name= this.id;
           document.getElementById("info").classList.remove("hidden");
           document.getElementById("item_name").innerHTML = "<b>Item Name:</b> " + name;
@@ -295,41 +300,46 @@
               document.getElementById("protein").innerHTML = "<b>Protein:</b> "+ d["Protein"];
 
               //graph
+              let metrics = [d["Calories"], d["Total Fat"], d["Cholesterol"], d["Sodium"], d["Carbohydrates"], d["Protein"]];
+
               let nutrition_graph = d3.select("svg#nutrition_graph");
               let width = nutrition_graph.attr("width");
               let height = nutrition_graph.attr("height");
               let xscale = d3.scaleLinear()
-                .domain([0,1000])
-                .range([0,400]);
+                .domain([0,1200])
+                .range([0,370]);
 
               let yscale = d3.scaleLinear()
-                .domain([0,10])
-                .range([300,0]);
+                .domain([0,7])
+                .range([300,10])
+
+              let left_margin = 30;
+              metrics.forEach((d,i)=>{
+                nutrition_graph.append("line")
+                  .attr("x1",left_margin)
+                  .attr("x2",xscale( d )+left_margin)
+                  .attr("y1",(height/7)*(i+1))
+                  .attr("y2",(height/7)*(i+1))
+                  .style("stroke", "#ffffff")
+                  .style("stroke-width", 15);
+              });
 
               var xaxis = d3.axisBottom()
                   .scale(xscale)
-                  .ticks(3);
+                  .ticks(10);
 
               var xaxis_group = nutrition_graph.append("g")
-                  // .attr("transform", "translate(30,30)")
+                  .attr("transform", "translate(30,10)")
                   //move 45px to accomodate axis
                   .call(xaxis);
 
               var yaxis = d3.axisLeft()
                   .scale(yscale)
-                  .ticks(10);
+                  .ticks(0);
               var yaxis_group = nutrition_graph.append("g")
-                  // .attr("transform", "translate(30,0)")
+                  .attr("transform", "translate(30,10)")
                   //.style("font-size", 8)
                   .call(yaxis);
-
-                svg.append("line")
-                  .attr("x1",xscale( d["Calories"] ))
-                  .attr("x2",yscale( d["Calories"] ))
-                  .attr("y1",height/2)
-                  .attr("y2",height/2 - yscale( d["Calories"] ))
-                  .style("stroke", "#ffffff")
-                  .style("stroke-width", 10);
 
 
 
@@ -358,9 +368,9 @@
           };
         });
 
-    });
+    }); //on click
 
-
+// });
 
   }); //end of dataset
 
