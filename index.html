@@ -56,6 +56,9 @@
     <div id="inchInput"></div>
     <div id="weightInput"></div>
     <div id="exerciseInput"></div>
+    <button id="generateRec" onclick="showRecData();">Get your Recommended intake </button>
+    <div id="showRec"></div>
+
 
     <h2 align="center"> McDonald's Menu </h2>
     <p align="center"><em>Pick out a meal from the McDonald's menu (below)! Click into items to see nutritional facts and add them to your cart as you'd like. </em> </p>
@@ -239,6 +242,14 @@
       return recCal
     };
 
+    function showRecData(){
+      d3.select("div#showRec").selectAll('text').remove();
+      d3.select("div#showRec")
+        .append('text')
+        .text('Your Daily Recommended Intake is ' + Math.round(recCal*100)/100);
+      var scroll = window.scrollTo(0,250);
+    }
+
 
     /*Menu Section*/
     let svg = d3.select("svg#menu");
@@ -355,6 +366,7 @@
                 }
                 document.getElementById("total_order").innerHTML = "<b>Total Calories:</b> "+ totalOrdered;
               };
+                var scroll2 = window.scrollTo(0,2000);
             };
           };
         });
